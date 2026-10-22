@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: chores
+      POSTGRES_PASSWORD: chores
+      POSTGRES_DB: chores
+    ports:
+      - "5432:5432"
+    volumes:
+      - chores-db:/var/lib/postgresql/data
+
+volumes:
+  chores-db:
