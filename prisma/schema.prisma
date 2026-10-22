@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Frequency {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum AssignmentMode {
+  FIXED
+  ROTATING
+}
+
+model Member {
+  id          String          @id @default(cuid())
+  name        String
+  color       String
+  createdAt   DateTime        @default(now())
+  deletedAt   DateTime?
+  assignments ChoreAssignee[]
+}
+
+model Chore {
+  id             String               @id @default(cuid())
+  title          String
+  notes          String?
+  startDate      DateTime             @db.Date
+  /// "HH:MM" in office-local wall-clock time; null means all-day.
+  startTime      String?
+  durationMin    Int?
+  freq           Frequency            @default(NONE)
+  interval       Int                  @default(1)
+  /// 0 = Monday … 6 = Sunday.
+  byWeekday      Int[]
+  untilDate      DateTime?            @db.Date
+  assignmentMode AssignmentMode       @default(FIXED)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  assignees      ChoreAssignee[]
+  overrides      OccurrenceOverride[]
+}
+
+model ChoreAssignee {
+  choreId  String
+  memberId String
+  position Int
+  chore    Chore  @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([choreId, memberId])
+}
+
+model OccurrenceOverride {
+  id               String    @id @default(cuid())
+  choreId          String
+  originalDate     DateTime  @db.Date
+  skipped          Boolean   @default(false)
+  overrideDate     DateTime? @db.Date
+  overrideMemberId String?
+  doneAt           DateTime?
+  doneAssigneeId   String?
+  chore            Chore     @relation(fields: [choreId], references: [id], onDelete: Cascade)
+
+  @@unique([choreId, originalDate])
+}
