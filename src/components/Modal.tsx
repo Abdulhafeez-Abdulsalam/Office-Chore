@@ -30,7 +30,7 @@ export function Modal({
       onClose={onClose}
       onClick={(e) => e.target === ref.current && onClose()}
       aria-labelledby="modal-title"
-      className={`m-auto w-[calc(100%-2rem)] ${wide ? "max-w-xl" : "max-w-md"} rounded-xl border border-line bg-surface p-0 text-fg shadow-2xl`}
+      className={`m-auto w-[calc(100%-2rem)] ${wide ? "max-w-xl" : "max-w-md"} max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border border-line bg-surface p-0 text-fg shadow-2xl`}
     >
       {open && (
         <div className="p-5">
@@ -54,8 +54,11 @@ export function Modal({
   );
 }
 
-export const inputClass =
-  "w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm text-fg outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
+/** Field styling without a width, for inline controls. */
+export const fieldClass =
+  "rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm text-fg outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
+
+export const inputClass = `${fieldClass} w-full`;
 
 export const buttonClass =
   "inline-flex items-center justify-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-medium text-fg hover:bg-surface-2 disabled:opacity-50";

@@ -51,7 +51,16 @@ export function OccurrenceDialog({
     setBusy(false);
   };
 
-  const done = occurrence.status === "done";
+  const [done, setDone] = useState(occurrence.status === "done");
+
+  const toggleDone = (next: boolean) => {
+    setDone(next);
+    run(async () => {
+      const message = await onToggleDone(next);
+      if (message) setDone(!next);
+      return message;
+    });
+  };
 
   const scopeButtons = (onPick: (scope: Scope) => void, verb: string) => (
     <div className="space-y-3">
@@ -122,7 +131,7 @@ export function OccurrenceDialog({
               type="checkbox"
               checked={done}
               disabled={busy}
-              onChange={(e) => run(() => onToggleDone(e.target.checked))}
+              onChange={(e) => toggleDone(e.target.checked)}
               className="size-4"
             />
             Done

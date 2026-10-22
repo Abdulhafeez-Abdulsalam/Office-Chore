@@ -63,7 +63,13 @@ test("a weekly rotating chore alternates people week to week and shows in month 
 }) => {
   await addMember(page, "Alice");
   await addMember(page, "Bob");
-  await createChore(page, { title: "Dishes", weekly: true, rotation: ["Alice", "Bob"] });
+  // Starting two turns back keeps this week on Alice and puts adjacent turns in any month grid.
+  await createChore(page, {
+    title: "Dishes",
+    weekly: true,
+    startDate: isoDaysFromToday(-14),
+    rotation: ["Alice", "Bob"],
+  });
 
   await expect(event(page, "Dishes")).toContainText("Alice");
   await page.locator(".fc-next-button").click();
@@ -73,8 +79,10 @@ test("a weekly rotating chore alternates people week to week and shows in month 
 
   await page.locator(".fc-today-button").click();
   await page.getByRole("button", { name: "Month" }).click();
-  await expect(event(page, "Dishes").first()).toBeVisible();
-  expect(await event(page, "Dishes").count()).toBeGreaterThanOrEqual(2);
+  await expect(page.locator(".fc-dayGridMonth-view")).toBeVisible();
+  await expect.poll(() => event(page, "Dishes").count()).toBeGreaterThanOrEqual(2);
+  await expect(event(page, "Dishes").filter({ hasText: "Alice" }).first()).toBeVisible();
+  await expect(event(page, "Dishes").filter({ hasText: "Bob" }).first()).toBeVisible();
 });
 
 test("marking done, and showing missed occurrences as overdue", async ({ page }) => {

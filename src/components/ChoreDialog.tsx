@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { ChoreRule, Frequency } from "@/lib/schedule";
 import type { MemberDTO } from "@/lib/events";
 import type { ChoreInput } from "@/lib/validation";
-import { ErrorText, Modal, buttonClass, inputClass, primaryButtonClass } from "./Modal";
+import { ErrorText, Modal, buttonClass, fieldClass, inputClass, primaryButtonClass } from "./Modal";
 
 /** Index 0 = Monday … 6 = Sunday, matching the stored rule. */
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -189,7 +189,7 @@ export function ChoreDialog({
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <select
               aria-label="Repeat"
-              className={`${inputClass} w-auto`}
+              className={`${fieldClass} w-auto`}
               value={form.freq}
               onChange={(e) => setFreq(e.target.value as Frequency)}
             >
@@ -206,7 +206,7 @@ export function ChoreDialog({
                   aria-label="Interval"
                   min={1}
                   max={99}
-                  className={`${inputClass} w-16`}
+                  className={`${fieldClass} w-16`}
                   value={form.interval}
                   onChange={(e) => set("interval", Math.max(1, Number(e.target.value)))}
                 />
@@ -246,7 +246,7 @@ export function ChoreDialog({
               <span>Ends</span>
               <input
                 type="date"
-                className={`${inputClass} w-auto`}
+                className={`${fieldClass} w-auto`}
                 value={form.untilDate ?? ""}
                 min={form.startDate}
                 onChange={(e) => set("untilDate", e.target.value || null)}
