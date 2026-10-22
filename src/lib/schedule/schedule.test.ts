@@ -72,10 +72,9 @@ describe("seriesDates", () => {
   });
 
   it("repeats every other week", () => {
-    expect(seriesDates(rule({ freq: "WEEKLY", interval: 2, byWeekday: [4] }), "2026-02-01")).toEqual([
-      "2026-01-09",
-      "2026-01-23",
-    ]);
+    expect(
+      seriesDates(rule({ freq: "WEEKLY", interval: 2, byWeekday: [4] }), "2026-02-01"),
+    ).toEqual(["2026-01-09", "2026-01-23"]);
   });
 
   it("defaults a weekly rule with no weekdays to the start date's weekday", () => {
@@ -172,7 +171,9 @@ describe("expandOccurrences", () => {
 
   it("keeps a completed occurrence's assignee after the rotation changes", () => {
     const before = rule({ freq: "WEEKLY", assignmentMode: "ROTATING", assigneeIds: ["a", "b"] });
-    const done = [override({ originalDate: "2026-01-12", doneAt: new Date(), doneAssigneeId: "b" })];
+    const done = [
+      override({ originalDate: "2026-01-12", doneAt: new Date(), doneAssigneeId: "b" }),
+    ];
     const after = { ...before, assigneeIds: ["a", "c", "d"] };
     const occ = expandOccurrences(after, done, "2026-01-12", "2026-01-13", "2026-01-20");
     expect(occ[0].assigneeId).toBe("b");
@@ -180,7 +181,9 @@ describe("expandOccurrences", () => {
 
   it("keeps completed history that a series edit no longer produces", () => {
     const r = rule({ freq: "WEEKLY", byWeekday: [1] }); // moved from Mondays to Tuesdays
-    const done = [override({ originalDate: "2026-01-05", doneAt: new Date(), doneAssigneeId: "alice" })];
+    const done = [
+      override({ originalDate: "2026-01-05", doneAt: new Date(), doneAssigneeId: "alice" }),
+    ];
     const occ = expandOccurrences(r, done, "2026-01-05", "2026-01-07", "2026-01-10");
     expect(occ.map((o) => [o.date, o.status, o.index])).toEqual([
       ["2026-01-05", "done", -1],
@@ -189,7 +192,13 @@ describe("expandOccurrences", () => {
   });
 
   it("leaves unassigned when there are no assignees", () => {
-    const [occ] = expandOccurrences(rule({ assigneeIds: [] }), [], "2026-01-01", "2026-02-01", "2026-01-01");
+    const [occ] = expandOccurrences(
+      rule({ assigneeIds: [] }),
+      [],
+      "2026-01-01",
+      "2026-02-01",
+      "2026-01-01",
+    );
     expect(occ.assigneeId).toBeNull();
   });
 });
@@ -235,7 +244,9 @@ describe("member removal", () => {
     expect(withoutMember(rules[0], "alice").assigneeIds).toEqual([]);
     const shrunk = withoutMember({ ...rules[1], freq: "WEEKLY" }, "alice");
     expect(
-      expandOccurrences(shrunk, [], "2026-01-01", "2026-01-13", "2026-01-01").map((o) => o.assigneeId),
+      expandOccurrences(shrunk, [], "2026-01-01", "2026-01-13", "2026-01-01").map(
+        (o) => o.assigneeId,
+      ),
     ).toEqual(["bob", "bob"]);
   });
 });

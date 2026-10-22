@@ -41,4 +41,6 @@ export interface Occurrence {
   /** Position in the series; -1 for a completed occurrence the current rule no longer produces. */
   index: number;
   moved: boolean;
+  /** True when this one occurrence was given to someone other than the series' pick. */
+  reassigned: boolean;
 }

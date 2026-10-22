@@ -4,7 +4,9 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
+  /// Migrations need a non-pooled connection; Neon's Vercel integration provides it under this name.
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 enum Frequency {

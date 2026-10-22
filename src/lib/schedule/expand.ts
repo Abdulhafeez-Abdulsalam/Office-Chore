@@ -23,6 +23,7 @@ function buildOccurrence(
     status: done ? "done" : date < today ? "overdue" : "upcoming",
     index,
     moved: date !== originalDate,
+    reassigned: override?.overrideMemberId != null,
   };
 }
 
@@ -51,7 +52,9 @@ export function expandOccurrences(
     if (occ && occ.date >= rangeStart && occ.date < rangeEnd) result.push(occ);
   };
 
-  dates.forEach((date, index) => consider(buildOccurrence(rule, date, index, byDate.get(date), today)));
+  dates.forEach((date, index) =>
+    consider(buildOccurrence(rule, date, index, byDate.get(date), today)),
+  );
   for (const o of overrides) {
     if (o.doneAt && !inSeries.has(o.originalDate)) {
       consider(buildOccurrence(rule, o.originalDate, -1, o, today));

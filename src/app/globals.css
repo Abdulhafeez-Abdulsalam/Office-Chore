@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --surface-2: #f0f1f3;
+  --border: #dfe1e5;
+  --text: #1c1d21;
+  --muted: #5f636b;
+  --accent: #2563eb;
+  --accent-text: #ffffff;
+  --danger: #c62828;
+  --overdue: #d32f2f;
+  --today: #eef4ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111215;
+    --surface: #1a1c20;
+    --surface-2: #24272c;
+    --border: #33363c;
+    --text: #e8e9eb;
+    --muted: #a0a4ab;
+    --accent: #5b8def;
+    --accent-text: #0b0c0e;
+    --danger: #ef6b6b;
+    --overdue: #ff6b6b;
+    --today: #1d2533;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-text);
+  --color-danger: var(--danger);
+  --color-overdue: var(--overdue);
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+/* FullCalendar theming */
+.fc {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--surface);
+  --fc-neutral-bg-color: var(--surface-2);
+  --fc-today-bg-color: var(--today);
+  --fc-button-bg-color: var(--surface);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--text);
+  --fc-button-hover-bg-color: var(--surface-2);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--accent);
+  --fc-button-active-border-color: var(--accent);
+  --fc-now-indicator-color: var(--overdue);
+  font-size: 0.875rem;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  color: var(--accent-text);
+}
+
+.fc .fc-button {
+  font-size: 0.8125rem;
+  text-transform: none;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.fc a {
+  color: inherit;
+}
+
+.fc .fc-event {
+  cursor: pointer;
+}
+
+.fc .chore-done {
+  opacity: 0.55;
+}
+
+.fc .chore-done .chore-title {
+  text-decoration: line-through;
+}
+
+.fc .chore-overdue {
+  box-shadow: inset 4px 0 0 var(--overdue);
+}
+
+@media (max-width: 640px) {
+  .fc .fc-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
